@@ -80,6 +80,6 @@ module.exports = {
       utils.build.failPlugin(messages, { errors });
     }
 
-    utils.status.show({ summary: 'Sitemap submitted successfully', text: messages });
+    utils.status.show({ title: 'Main title', summary: 'Sitemap submitted successfully', text: messages });
   }
 };
