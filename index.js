@@ -28,15 +28,15 @@ const submitToProvider = async ({ provider, sitemapUrl }) => {
   }
 
   const providerUrl = providerUrls[provider](sitemapUrl);
-  console.log(`Going to submit sitemap to ${provider} \n * URL: ${providerUrl}`);
+  console.log(`Going to submit sitemap to ${provider} \n --> URL: ${providerUrl}`);
 
   try {
     await fetch(providerUrl);
   } catch (error) {
-    return { message: `\u274c ERROR, was not able to submit sitemap to ${provider}`, error };
+    return { message: `\u274c ERROR! was not able to submit sitemap to ${provider}`, error };
   }
 
-  return { message: `\u2713 DONE! Sitemap submitted succesfully to ${provider}` };
+  return { message: `\u2713  DONE! Sitemap submitted succesfully to ${provider}` };
 }
 
 // helper
@@ -67,6 +67,21 @@ module.exports = {
       providers.map(provider => submitToProvider({ provider, sitemapUrl }))
     );
 
+    // For failed submissions, it might be better to use something like a utils.build.warn() as discussed here: 
+    // https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap/issues/4
+    // But till then, just console.log the errors and fail the plugin.
+    // ---
+    // For successful submissions, it's better to use utils.status.show(), but currently Netlify doesn't show 
+    // the status in the UI yet, so just console.log() it for now
+    // See https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap/issues/4
+    submissions.forEach(({ error, message }) => {
+      if (error) {
+        console.error('\x1b[31m', message);
+      } else {
+        console.log('\x1b[32m', message);
+      }
+    });
+
     const messages = submissions
       .map(submission => submission.message)
       .join('\n');
@@ -75,11 +90,11 @@ module.exports = {
       .map(submission => submission.error)
       .filter(error => error);
     
-    // If there was an error in 1 of the submissions, fail the plugin
+    // If there was at least 1 error, fail the plugin, but continue the build.
     if (errors.length > 0) {
-      utils.build.failPlugin(messages, { errors });
+      utils.build.failPlugin(`${errors.length} sitemap submission(s) failed`, { error: errors });
     }
 
-    utils.status.show({ summary: 'Sitemap submitted successfully', text: messages });
+    utils.status.show({ summary: 'Sitemap submitted succesfully', text: messages });
   }
 };
