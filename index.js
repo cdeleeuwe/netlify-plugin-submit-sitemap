@@ -1,5 +1,5 @@
 const url = require('url');
-
+const fetch = require('node-fetch');
 const {
   CONTEXT,
   URL,
@@ -28,14 +28,14 @@ const submitToProvider = async ({ utils, provider, sitemapUrl }) => {
   }
 
   const providerUrl = providerUrls[provider](sitemapUrl);
-  const command = `curl -s -o /dev/null --show-error --url ${providerUrl}`;
 
   console.log(`Going to submit sitemap to ${provider}, URL: ${providerUrl}`);
-  const { stderr } = await utils.run.command(command);
 
-  if (stderr) {
+  try {
+    await fetch(providerUrl);
+  } catch (error) {
     console.log(`\n \u274c ERROR, was not able to submit sitemap to ${provider}`);
-    return;
+    console.log(error);
   }
 
   console.log(`\n \u2713 DONE! Sitemap submitted succesfully to ${provider}\n`);

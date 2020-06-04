@@ -16,5 +16,8 @@
   "keywords": [
     "netlify",
     "netlify-plugin"
-  ]
+  ],
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  }
 }
