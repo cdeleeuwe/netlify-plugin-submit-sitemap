@@ -2,6 +2,9 @@
 publish = "public"
 ignore = "(exit 1)"
 
+[build.environment]
+CONTEXT = "production"
+
 [[plugins]]
 package = "netlify-plugin-submit-sitemap" # "../"
   [plugins.inputs]
