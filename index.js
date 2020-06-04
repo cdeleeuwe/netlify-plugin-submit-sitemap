@@ -64,8 +64,8 @@ module.exports = {
       return;
     }
 
-    for (const provider of providers) {
-      await submitToProvider({ utils, provider, sitemapUrl });
-    }
+    await Promise.all(
+      providers.map(provider => submitToProvider({ utils, provider, sitemapUrl }))
+    );
   }
 };
