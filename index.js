@@ -76,9 +76,9 @@ module.exports = {
     // See https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap/issues/4
     submissions.forEach(({ error, message }) => {
       if (error) {
-        console.error('\x1b[31m', message);
+        console.error('\x1b[31m', message, '\x1b[0m');
       } else {
-        console.log('\x1b[32m', message);
+        console.log('\x1b[32m', message, '\x1b[0m');
       }
     });
 
