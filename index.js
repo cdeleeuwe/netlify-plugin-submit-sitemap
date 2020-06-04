@@ -21,24 +21,22 @@ const defaults = {
   sitemapPath: '/sitemap.xml'
 }
 
-const submitToProvider = async ({ utils, provider, sitemapUrl }) => {
+// Submit sitemap to a provider. Returns either a successful or failed submission, but no error is thrown
+const submitToProvider = async ({ provider, sitemapUrl }) => {
   if (!providerUrls[provider]) {
-    console.error(`Provider ${provider} not found!`);
-    return;
+    return { message: `Provider ${provider} not found!`, error: 'Invalid provider' };
   }
 
   const providerUrl = providerUrls[provider](sitemapUrl);
-
-  console.log(`Going to submit sitemap to ${provider}, URL: ${providerUrl}`);
+  console.log(`Going to submit sitemap to ${provider} \n * URL: ${providerUrl}`);
 
   try {
     await fetch(providerUrl);
   } catch (error) {
-    console.log(`\n \u274c ERROR, was not able to submit sitemap to ${provider}`);
-    console.log(error);
+    return { message: `\u274c ERROR, was not able to submit sitemap to ${provider}`, error };
   }
 
-  console.log(`\n \u2713 DONE! Sitemap submitted succesfully to ${provider}\n`);
+  return { message: `\u2713 DONE! Sitemap submitted succesfully to ${provider}` };
 }
 
 // helper
@@ -64,8 +62,24 @@ module.exports = {
       return;
     }
 
-    await Promise.all(
-      providers.map(provider => submitToProvider({ utils, provider, sitemapUrl }))
+    // submit sitemap to all providers
+    const submissions = await Promise.all(
+      providers.map(provider => submitToProvider({ provider, sitemapUrl }))
     );
+
+    const messages = submissions
+      .map(submission => submission.message)
+      .join('\n');
+
+    const errors = submissions
+      .map(submission => submission.error)
+      .filter(error => error);
+    
+    // If there was an error in 1 of the submissions, fail the plugin
+    if (errors.length > 0) {
+      utils.build.failPlugin(messages, { errors });
+    }
+
+    utils.status.show({ summary: 'Sitemap submitted successfully', text: messages });
   }
 };
