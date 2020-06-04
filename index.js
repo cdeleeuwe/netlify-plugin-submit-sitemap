@@ -56,11 +56,11 @@ module.exports = {
     }
     const sitemapUrl = (new url.URL(sitemapPath, baseUrl)).href;
 
-    // Only run on production branch
-    if (!isProduction()) {
-      console.log(`Skip submitting sitemap to ${providers.join(', ')}, because this isn't a production build`);
-      return;
-    }
+    // // Only run on production branch
+    // if (!isProduction()) {
+    //   console.log(`Skip submitting sitemap to ${providers.join(', ')}, because this isn't a production build`);
+    //   return;
+    // }
 
     // submit sitemap to all providers
     const submissions = await Promise.all(
