@@ -2,11 +2,8 @@
 publish = "public"
 ignore = "(exit 1)"
 
-[build.environment]
-CONTEXT = "production"
-
 [[plugins]]
-package = "netlify-plugin-submit-sitemap" # "../"
+package = "../"
   [plugins.inputs]
   
   # The base url of your site (optional, default = main URL set in Netlify)
@@ -21,5 +18,5 @@ package = "netlify-plugin-submit-sitemap" # "../"
     "bing"
   ]
 
-# [[plugins]]
-# package = "@netlify/plugin-local-install-core"
+[[plugins]]
+package = "@netlify/plugin-local-install-core"
