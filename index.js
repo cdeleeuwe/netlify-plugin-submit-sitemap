@@ -10,7 +10,7 @@ const isProduction = () => {
 }
 
 const providerUrls = {
-  'google': (sitemapUrl) => `https://www.google.com/ping?sitemap=${sitemapUrl}`,
+  'google': (sitemapUrl) => `https://www.googddle.com/ping?sitemap=${sitemapUrl}`,
   'bing': (sitemapUrl) => `https://www.bing.com/ping?sitemap=${sitemapUrl}`,
 }
 
