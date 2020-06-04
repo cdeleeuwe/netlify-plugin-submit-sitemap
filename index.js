@@ -56,7 +56,7 @@ module.exports = {
     const { providers, baseUrl, sitemapPath } = {
       ...defaults, ...removeEmptyValues(inputs)
     }
-    const sitemapUrl = url.resolve(baseUrl, sitemapPath);
+    const sitemapUrl = (new url.URL(sitemapPath, baseUrl)).href;
 
     // Only run on production branch
     if (!isProduction()) {
