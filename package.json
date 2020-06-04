@@ -1,0 +1,20 @@
+{
+  "name": "netlify-plugin-submit-sitemap",
+  "version": "0.1.0",
+  "description": "Automatically submit your sitemap to Google and Bing!",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap.git"
+  },
+  "author": "Cassius de Leeuwe <cassius@cadl.dev>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap/issues"
+  },
+  "homepage": "https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap#readme",
+  "keywords": [
+    "netlify",
+    "netlify-plugin"
+  ]
+}

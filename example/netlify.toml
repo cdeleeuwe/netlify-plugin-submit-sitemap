@@ -1,0 +1,21 @@
+[build]
+publish = "public"
+
+[[plugins]]
+package = "../"
+  [plugins.inputs]
+  
+  # The base url of your site (optional, default = main URL set in Netlify)
+  # baseUrl = "https://example.com"
+
+  # Path to the sitemap URL (optional, default = /sitemap.xml)
+  sitemapPath = "/sitemap.xml"
+  
+  # Enabled providers to submit sitemap to (optional, default = 'google', 'bing'). Possible providers are currently only 'google' and 'bing'.
+  providers = [
+    "google",
+    "bing"
+  ]
+
+[[plugins]]
+package = "@netlify/plugin-local-install-core"
