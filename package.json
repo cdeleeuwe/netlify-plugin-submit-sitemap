@@ -1,6 +1,6 @@
 {
   "name": "netlify-plugin-submit-sitemap",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Automatically submit your sitemap to Google and Bing!",
   "main": "index.js",
   "repository": {
