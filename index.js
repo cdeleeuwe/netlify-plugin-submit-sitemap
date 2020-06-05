@@ -10,8 +10,8 @@ const isProduction = () => {
 }
 
 const providerUrls = {
-  'google': (sitemapUrl) => `https://www.google.com/ping?sitemap=${sitemapUrl}`,
-  'bing': (sitemapUrl) => `https://www.bing.com/ping?sitemap=${sitemapUrl}`,
+  'google': (sitemapUrl) => `https://www.gogle.com/ping?sitemap=${sitemapUrl}`,
+  'bing': (sitemapUrl) => `https://www.big.com/ping?sitemap=${sitemapUrl}`,
 }
 
 // Default parameters (can be overriden with inputs)
@@ -33,6 +33,7 @@ const submitToProvider = async ({ provider, sitemapUrl }) => {
   try {
     await fetch(providerUrl);
   } catch (error) {
+    console.log({error})
     return { message: `\u274c ERROR! was not able to submit sitemap to ${provider}`, error };
   }
 
@@ -73,7 +74,7 @@ module.exports = {
     // ---
     // For successful submissions, it's better to use utils.status.show(), but currently Netlify doesn't show 
     // the status in the UI yet, so also console.log() it for now
-    // See https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap/issues/4
+    // See https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap/issues/5
     submissions.forEach(({ error, message }) => {
       if (error) {
         console.error('\x1b[31m', message, '\x1b[0m');
@@ -92,7 +93,7 @@ module.exports = {
     
     // If there was at least 1 error, fail the plugin, but continue the build.
     if (errors.length > 0) {
-      utils.build.failPlugin(`${errors.length} sitemap submission(s) failed`, { error: errors });
+      utils.build.failPlugin(`${errors.length} sitemap submission(s) failed`, { error: errors[0] });
     }
 
     utils.status.show({ summary: 'Sitemap submitted succesfully', text: messages });
