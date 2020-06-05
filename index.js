@@ -10,8 +10,8 @@ const isProduction = () => {
 }
 
 const providerUrls = {
-  'google': (sitemapUrl) => `https://www.gogle.com/ping?sitemap=${sitemapUrl}`,
-  'bing': (sitemapUrl) => `https://www.big.com/ping?sitemap=${sitemapUrl}`,
+  'google': (sitemapUrl) => `https://www.google.com/ping?sitemap=${sitemapUrl}`,
+  'bing': (sitemapUrl) => `https://www.bing.com/ping?sitemap=${sitemapUrl}`,
 }
 
 // Default parameters (can be overriden with inputs)
@@ -33,7 +33,6 @@ const submitToProvider = async ({ provider, sitemapUrl }) => {
   try {
     await fetch(providerUrl);
   } catch (error) {
-    console.log({error})
     return { message: `\u274c ERROR! was not able to submit sitemap to ${provider}`, error };
   }
 
