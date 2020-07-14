@@ -12,6 +12,7 @@ const isProduction = () => {
 const providerUrls = {
   'google': (sitemapUrl) => `https://www.google.com/ping?sitemap=${sitemapUrl}`,
   'bing': (sitemapUrl) => `https://www.bing.com/ping?sitemap=${sitemapUrl}`,
+  'yandex': (sitemapUrl) => `https://webmaster.yandex.ru/ping?sitemap=${sitemapUrl}`
 }
 
 // Default parameters (can be overriden with inputs)
