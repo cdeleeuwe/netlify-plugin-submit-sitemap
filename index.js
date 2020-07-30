@@ -40,7 +40,7 @@ const submitToProvider = async ({ provider, sitemapUrl }) => {
   return { message: `\u2713  DONE! Sitemap submitted succesfully to ${provider}` };
 }
 
-// helper
+// helpers
 const removeEmptyValues = (obj) => {
   return Object.keys(obj)
     .filter(key => obj[key] != null)
@@ -50,17 +50,31 @@ const removeEmptyValues = (obj) => {
     }, {});
 };
 
+// Make sure the url is prepended with 'https://'
+const prependScheme = (baseUrl) => {
+  return baseUrl.match(/^[a-zA-Z]+:\/\//) 
+    ? baseUrl
+    : baseUrl = `https://${baseUrl}`;
+}
+
 module.exports = {
   async onSuccess({ utils, inputs }) {
     const { providers, baseUrl, sitemapPath } = {
       ...defaults, ...removeEmptyValues(inputs)
     }
-    const sitemapUrl = (new url.URL(sitemapPath, baseUrl)).href;
 
     // Only run on production branch
     if (!isProduction()) {
       console.log(`Skip submitting sitemap to ${providers.join(', ')}, because this isn't a production build`);
       return;
+    }
+
+    let sitemapUrl;
+    const baseUrlWithScheme = prependScheme(baseUrl);
+    try {
+      sitemapUrl = (new url.URL(sitemapPath, baseUrlWithScheme)).href;
+    } catch(error) {
+      return utils.build.failPlugin(`Invalid sitemap URL! baseUrl: ${baseUrlWithScheme}, sitemapPath: ${sitemapPath}`, { error });
     }
 
     // submit sitemap to all providers
