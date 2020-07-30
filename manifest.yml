@@ -8,4 +8,4 @@ inputs:
     default: "/sitemap.xml"
   - name: providers
     description: List of enabled providers
-    default: ["google", "bing"]
+    default: ["google", "bing", "yandex"]
