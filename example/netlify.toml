@@ -7,7 +7,7 @@ package = "../"
   [plugins.inputs]
   
   # The base url of your site (optional, default = main URL set in Netlify)
-  # baseUrl = "https://example.com"
+  baseUrl = "example.com"
 
   # Path to the sitemap URL (optional, default = /sitemap.xml)
   sitemapPath = "/sitemap.xml"
