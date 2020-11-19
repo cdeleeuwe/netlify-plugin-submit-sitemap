@@ -5,10 +5,6 @@ const {
   URL,
 } = process.env;
 
-const isProduction = () => {
-  return CONTEXT === 'production';
-}
-
 const providerUrls = {
   'google': (sitemapUrl) => `https://www.google.com/ping?sitemap=${sitemapUrl}`,
   'bing': (sitemapUrl) => `https://www.bing.com/ping?sitemap=${sitemapUrl}`,
@@ -52,19 +48,19 @@ const removeEmptyValues = (obj) => {
 
 // Make sure the url is prepended with 'https://'
 const prependScheme = (baseUrl) => {
-  return baseUrl.match(/^[a-zA-Z]+:\/\//) 
+  return baseUrl.match(/^[a-zA-Z]+:\/\//)
     ? baseUrl
     : baseUrl = `https://${baseUrl}`;
 }
 
 module.exports = {
-  async onSuccess({ utils, inputs }) {
+  async onSuccess({ utils, inputs, constants }) {
     const { providers, baseUrl, sitemapPath } = {
       ...defaults, ...removeEmptyValues(inputs)
     }
 
-    // Only run on production branch
-    if (!isProduction()) {
+    // Only run on production builds
+    if (constants.IS_LOCAL || CONTEXT !== 'production') {
       console.log(`Skip submitting sitemap to ${providers.join(', ')}, because this isn't a production build`);
       return;
     }
@@ -82,11 +78,11 @@ module.exports = {
       providers.map(provider => submitToProvider({ provider, sitemapUrl }))
     );
 
-    // For failed submissions, it might be better to use something like a utils.build.warn() as discussed here: 
+    // For failed submissions, it might be better to use something like a utils.build.warn() as discussed here:
     // https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap/issues/4
     // But till then, just console.log the errors and fail the plugin.
     // ---
-    // For successful submissions, it's better to use utils.status.show(), but currently Netlify doesn't show 
+    // For successful submissions, it's better to use utils.status.show(), but currently Netlify doesn't show
     // the status in the UI yet, so also console.log() it for now
     // See https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap/issues/5
     submissions.forEach(({ error, message }) => {
@@ -104,7 +100,7 @@ module.exports = {
     const errors = submissions
       .map(submission => submission.error)
       .filter(error => error);
-    
+
     // If there was at least 1 error, fail the plugin, but continue the build.
     if (errors.length > 0) {
       utils.build.failPlugin(`${errors.length} sitemap submission(s) failed`, { error: errors[0] });
