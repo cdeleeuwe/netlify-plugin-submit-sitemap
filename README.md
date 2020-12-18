@@ -6,7 +6,9 @@ This plugin will notify the search engines after every production build about yo
 
 ## Usage
 
-To install, add the following lines to your `netlify.toml` file:
+You can install this plugin in the Netlify UI from this [direct in-app installation link](https://app.netlify.com/plugins/netlify-plugin-submit-sitemap/install) or from the [Plugins directory](https://app.netlify.com/plugins).
+
+To use file-based installation, add the following lines to your `netlify.toml` file:
 
 ```toml
 [build]
@@ -32,3 +34,9 @@ To install, add the following lines to your `netlify.toml` file:
 ```
 
 Note: The `[[plugins]]` line is required for each plugin, even if you have other plugins in your `netlify.toml` file already.
+
+To complete file-based installation, from your project's base directory, use npm, yarn, or any other Node.js package manager to add this plugin to `devDependencies` in `package.json`.
+
+```
+npm install -D netlify-plugin-submit-sitemap
+```
