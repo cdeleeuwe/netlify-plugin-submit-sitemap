@@ -25,6 +25,9 @@ To use file-based installation, add the following lines to your `netlify.toml` f
 	# Path to the sitemap URL (optional, default = /sitemap.xml)
 	sitemapPath = "/sitemap.xml"
 
+	# Time in seconds to not submit the sitemap after successful submission
+	ignorePeriod = 0
+
 	# Enabled providers to submit sitemap to (optional, default = 'google', 'bing', 'yandex'). Possible providers are currently only 'google', 'bing', 'yandex'.
 	providers = [
 		"google",

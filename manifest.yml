@@ -9,3 +9,6 @@ inputs:
   - name: providers
     description: List of enabled providers
     default: ["google", "bing", "yandex"]
+  - name: ignorePeriod
+    description: Time in seconds to not submit the sitemap after successful submission
+    default: 0

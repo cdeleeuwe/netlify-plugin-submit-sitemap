@@ -1,5 +1,7 @@
 const url = require('url');
 const fetch = require('node-fetch');
+
+const { isInIgnorePeriod, setLastSubmitTimestamp } = require('./helpers');
 const {
   CONTEXT,
   URL,
@@ -54,7 +56,8 @@ const prependScheme = (baseUrl) => {
 }
 
 module.exports = {
-  async onSuccess({ utils, inputs, constants }) {
+  async onSuccess(props) {
+    const { utils, inputs, constants } = props
     const { providers, baseUrl, sitemapPath } = {
       ...defaults, ...removeEmptyValues(inputs)
     }
@@ -62,6 +65,12 @@ module.exports = {
     // Only run on production builds
     if (constants.IS_LOCAL || CONTEXT !== 'production') {
       console.log(`Skip submitting sitemap to ${providers.join(', ')}, because this isn't a production build`);
+      return;
+    }
+
+    // Do not run if we are within the ignore period
+    if (await isInIgnorePeriod(props)) {
+      console.log(`Skip submitting sitemap, because it's within the ignore period`);
       return;
     }
 
@@ -104,8 +113,10 @@ module.exports = {
     // If there was at least 1 error, fail the plugin, but continue the build.
     if (errors.length > 0) {
       utils.build.failPlugin(`${errors.length} sitemap submission(s) failed`, { error: errors[0] });
+      return;
     }
 
+    await setLastSubmitTimestamp(props);
     utils.status.show({ summary: 'Sitemap submitted succesfully', text: messages });
   }
 };
