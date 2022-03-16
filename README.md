@@ -40,3 +40,7 @@ To complete file-based installation, from your project's base directory, use npm
 ```
 npm install -D netlify-plugin-submit-sitemap
 ```
+
+## Notes
+
+- DuckDuckGo is not a supported provider because it currently doesn't offer any manual method where you can enter your sitemap or webpage URLs for indexing; more information can be found [here](https://www.monsterinsights.com/submit-website-to-search-engines/)
