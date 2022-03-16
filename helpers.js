@@ -1,11 +1,11 @@
-const fs = require("fs");
+import fs from "fs";
 
 const LAST_SUBMIT_DATE_FILENAME = "./last_submit_date.txt";
 
 const getLastSubmitTimestamp = async (props) => {
   const { cache } = props.utils;
   await cache.restore(LAST_SUBMIT_DATE_FILENAME);
-  
+
   if (!fs.existsSync(LAST_SUBMIT_DATE_FILENAME)) {
     return;
   }
@@ -14,7 +14,7 @@ const getLastSubmitTimestamp = async (props) => {
   return parseInt(`${date}`, 10);
 };
 
-const setLastSubmitTimestamp = async (props) => {
+export const setLastSubmitTimestamp = async (props) => {
   const { cache } = props.utils;
   const { ignorePeriod } = props.inputs;
 
@@ -24,7 +24,7 @@ const setLastSubmitTimestamp = async (props) => {
   return cache.save(LAST_SUBMIT_DATE_FILENAME, { ttl: period });
 };
 
-const isInIgnorePeriod = async (props) => {
+export const isInIgnorePeriod = async (props) => {
   const lastSubmitDate = await getLastSubmitTimestamp(props);
   if (!lastSubmitDate) return false;
 
@@ -32,9 +32,4 @@ const isInIgnorePeriod = async (props) => {
   const period = parseInt(`${ignorePeriod}`, 10) * 1000;
   const now = new Date().getTime();
   return now < lastSubmitDate + period;
-};
-
-module.exports = {
-  setLastSubmitTimestamp,
-  isInIgnorePeriod,
 };

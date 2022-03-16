@@ -3,6 +3,7 @@
   "version": "0.2.3",
   "description": "Automatically submit your sitemap to Google, Bing, and Yandex!",
   "main": "index.js",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap.git"
@@ -18,6 +19,6 @@
     "netlify-plugin"
   ],
   "dependencies": {
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^3.2.3"
   }
 }
