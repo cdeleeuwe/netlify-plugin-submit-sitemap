@@ -2,13 +2,13 @@ name: netlify-plugin-submit-sitemap
 inputs:
   - name: baseUrl
     description: The base url of your site
-    default: 
+    default:
   - name: sitemapPath
     description: Path to the sitemap file
     default: "/sitemap.xml"
   - name: providers
     description: List of enabled providers
-    default: ["google", "bing", "yandex"]
+    default: ["google", "yandex"]
   - name: ignorePeriod
     description: Time in seconds to not submit the sitemap after successful submission
     default: 0

@@ -15,10 +15,9 @@ package = "../"
   # Time in seconds to not submit the sitemap after successful submission
   ignorePeriod = 0
   
-  # Enabled providers to submit sitemap to (optional, default = 'google', 'bing'). Possible providers are currently only 'google' and 'bing'.
+  # Enabled providers to submit sitemap to (optional, default = 'google', 'yandex'). Possible providers are currently only 'google' and 'yandex'.
   providers = [
     "google",
-    "bing",
     "yandex"
   ]
 
