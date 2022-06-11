@@ -18,6 +18,7 @@ package = "../"
   # Enabled providers to submit sitemap to (optional, default = 'google', 'yandex'). Possible providers are currently only 'google' and 'yandex'.
   providers = [
     "google",
+    "bing",
     "yandex"
   ]
 
