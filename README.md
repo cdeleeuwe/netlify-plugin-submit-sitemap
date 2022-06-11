@@ -1,6 +1,6 @@
 # Netlify Build Plugin: Automatically submit your sitemap after every production build
 
-Automatically submit your sitemap to **Google**, **Bing**, and **Yandex** after every production build!
+Automatically submit your sitemap to **Google** and **Yandex** after every production build!
 
 This plugin will notify the search engines after every production build about your latest sitemap. The plugin can be used without any configuration if using the defaults.
 
@@ -28,10 +28,9 @@ To use file-based installation, add the following lines to your `netlify.toml` f
 	# Time in seconds to not submit the sitemap after successful submission
 	ignorePeriod = 0
 
-	# Enabled providers to submit sitemap to (optional, default = 'google', 'bing', 'yandex'). Possible providers are currently only 'google', 'bing', 'yandex'.
+	# Enabled providers to submit sitemap to (optional, default = 'google', 'yandex'). Possible providers are currently only 'google', 'yandex'.
 	providers = [
 		"google",
-		"bing",
 		"yandex"
 	]
 ```
@@ -46,4 +45,6 @@ npm install -D netlify-plugin-submit-sitemap
 
 ## Notes
 
-- DuckDuckGo is not a supported provider because it currently doesn't offer any manual method where you can enter your sitemap or webpage URLs for indexing; more information can be found [here](https://www.monsterinsights.com/submit-website-to-search-engines/)
+- **DuckDuckGo** is not a supported provider because it currently doesn't offer any manual method where you can enter your sitemap or webpage URLs for indexing; more information can be found [here](https://www.monsterinsights.com/submit-website-to-search-engines/)
+
+- **Bing** is not supperted anymore, since it deprecated anonymous sitemap submission since May 2022
