@@ -21,10 +21,10 @@ const defaults = {
 const submitToProvider = async ({ provider, sitemapUrl }) => {
   // If the provider is Bing, skip it, because anonymous sitemap submission has been deprecated
   if (provider === "bing") {
-    console.warn(
-      "Not submitting to Bing, since this has been deprecated. See https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission"
-    );
-    return;
+    return {
+      isWarning: true,
+      message: `\u26A0 WARN! Sitemap not submitted to Bing, since this has been deprecated. See https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission"`,
+    };
   }
 
   if (!providerUrls[provider]) {
@@ -49,7 +49,7 @@ const submitToProvider = async ({ provider, sitemapUrl }) => {
   }
 
   return {
-    message: `\u2713  DONE! Sitemap submitted succesfully to ${provider}`,
+    message: `\u2713 DONE! Sitemap submitted succesfully to ${provider}`,
   };
 };
 
@@ -118,9 +118,11 @@ export const onSuccess = async (props) => {
   // For successful submissions, it's better to use utils.status.show(), but currently Netlify doesn't show
   // the status in the UI yet, so also console.log() it for now
   // See https://github.com/cdeleeuwe/netlify-plugin-submit-sitemap/issues/5
-  submissions.forEach(({ error, message }) => {
+  submissions.forEach(({ error, isWarning, message }) => {
     if (error) {
       console.error("\x1b[31m", message, "\x1b[0m");
+    } else if (isWarning) {
+      console.log("\x1b[33m", message, "\x1b[0m");
     } else {
       console.log("\x1b[32m", message, "\x1b[0m");
     }
