@@ -23,7 +23,7 @@ const submitToProvider = async ({ provider, sitemapUrl }) => {
   if (provider === "bing") {
     return {
       isWarning: true,
-      message: `\u26A0 WARN! Sitemap not submitted to Bing, since this has been deprecated. See https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission"`,
+      message: `\u26A0 WARN! Sitemap not submitted to Bing, since this has been deprecated. See https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission`,
     };
   }
 
