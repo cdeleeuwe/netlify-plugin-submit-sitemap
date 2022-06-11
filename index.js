@@ -19,19 +19,19 @@ const defaults = {
 
 // Submit sitemap to a provider. Returns either a successful or failed submission, but no error is thrown
 const submitToProvider = async ({ provider, sitemapUrl }) => {
-  if (!providerUrls[provider]) {
-    return {
-      message: `Provider ${provider} not found!`,
-      error: "Invalid provider",
-    };
-  }
-
   // If the provider is Bing, skip it, because anonymous sitemap submission has been deprecated
   if (provider === "bing") {
     console.warn(
       "Not submitting to Bing, since this has been deprecated. See https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission"
     );
     return;
+  }
+
+  if (!providerUrls[provider]) {
+    return {
+      message: `Provider ${provider} not found!`,
+      error: "Invalid provider",
+    };
   }
 
   const providerUrl = providerUrls[provider](sitemapUrl);
