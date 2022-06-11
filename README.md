@@ -47,4 +47,4 @@ npm install -D netlify-plugin-submit-sitemap
 
 - **DuckDuckGo** is not a supported provider because it currently doesn't offer any manual method where you can enter your sitemap or webpage URLs for indexing; more information can be found [here](https://www.monsterinsights.com/submit-website-to-search-engines/)
 
-- **Bing** is not supperted anymore, since it deprecated anonymous sitemap submission since May 2022
+- **Bing** is not supported anymore, since it deprecated anonymous sitemap submission since May 2022
