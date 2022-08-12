@@ -19,6 +19,9 @@
     "netlify-plugin"
   ],
   "dependencies": {
-    "node-fetch": "^3.2.3"
+    "node-fetch": "^3.2.3",
+    "url":"*",
+    "https":"*",
+    "fast-xml-parser":"*"
   }
 }
