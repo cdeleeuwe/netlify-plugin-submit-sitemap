@@ -21,6 +21,7 @@ package = "../"
     "bing",
     "yandex"
   ]
+  key = "8586419087c04744a51fe41345294cf9"
 
 [[plugins]]
 package = "@netlify/plugin-local-install-core"

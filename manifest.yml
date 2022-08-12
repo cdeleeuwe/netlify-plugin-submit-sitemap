@@ -8,7 +8,13 @@ inputs:
     default: "/sitemap.xml"
   - name: providers
     description: List of enabled providers
-    default: ["google", "yandex"]
+    default: ["google", "yandex","bing"]
   - name: ignorePeriod
     description: Time in seconds to not submit the sitemap after successful submission
     default: 0
+  - name: key
+    description: string value of your key
+    default: ""
+  - name: keyLocation
+    description: Location of key if its hosted on different server
+    default: ""
