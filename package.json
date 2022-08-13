@@ -1,6 +1,6 @@
 {
   "name": "netlify-plugin-submit-sitemap",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Automatically submit your sitemap to Google and Yandex!",
   "main": "index.js",
   "type": "module",
@@ -19,6 +19,9 @@
     "netlify-plugin"
   ],
   "dependencies": {
-    "node-fetch": "^3.2.3"
+    "node-fetch": "^3.2.3",
+    "url":"*",
+    "fast-xml-parser":"*",
+    "https":"*"
   }
 }

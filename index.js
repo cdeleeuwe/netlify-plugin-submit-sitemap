@@ -8,7 +8,7 @@ const { CONTEXT, URL } = process.env;
 const providerUrls = {
 	bing: () => `https://www.bing.com/indexnow`,
 	yandex: () => `https://www.yandex.com/indexnow`,
-	google: (sitemapUrl) => `https://www.google.com/ping?sitemap=${sitemapUrl}`,
+	google: (sitemapUrl) => `https://www.google.com/ping?sitemap=${sitemapUrl}`
 };
 
 // Default parameters (can be overriden with inputs)
@@ -28,24 +28,33 @@ const submitToProvider = async ({
 	key,
 	keyLocation,
 }) => {
-	// If the provider is google,
+	// If the provider is Google,
 	if (provider === "google") {
 		try {
 			const googleproviderUrl = providerUrls[provider](sitemapUrl);
-			await fetch(googleproviderUrl).then(
-				() => {
-          return {
-            message: `\u2713 DONE! Sitemap submitted succesfully to ${provider}`,
-          };
-        });
+			console.log(
+				`Going to submit sitemap to ${provider} \n --> URL: ${googleproviderUrl}`
+			);
+			await fetch(googleproviderUrl)
 		} catch (error) {
 			return {
 				message: `\u274c ERROR! was not able to submit sitemap to ${provider}`,
 				error,
 			};
 		}
+		return {
+            message: `\u2713 DONE! Sitemap submitted succesfully to ${provider}`,
+          };
 	}
-  const providerUrl = providerUrls[provider]();
+
+	if (!providerUrls[provider]) {
+		return {
+			message: `Provider ${provider} not found!`,
+			error: "Invalid provider",
+		};
+	}
+
+	const providerUrl = providerUrls[provider]();
 	console.log(
 		`Going to submit sitemap to ${provider} \n --> URL: ${providerUrl}`
 	);
@@ -70,7 +79,6 @@ const submitToProvider = async ({
 	};
 };
 
-
 // helpers
 const removeEmptyValues = (obj) => {
 	return Object.keys(obj)
@@ -90,7 +98,7 @@ const prependScheme = (baseUrl) => {
 
 export const onSuccess = async (props) => {
 	const { utils, inputs, constants } = props;
-	const { providers, baseUrl, sitemapPath,key,keyLocation} = {
+	const { providers, baseUrl, sitemapPath,key,keyLocation } = {
 		...defaults,
 		...removeEmptyValues(inputs),
 	};
@@ -126,7 +134,8 @@ export const onSuccess = async (props) => {
 
 	// submit sitemap to all providers
 	const submissions = await Promise.all(
-		providers.map((provider) => submitToProvider({ provider, sitemapUrl,key,keyLocation }))
+		
+		providers.map((provider) =>submitToProvider({ provider, sitemapUrl,baseUrl,key,keyLocation }))
 	);
 
 	// For failed submissions, it might be better to use something like a utils.build.warn() as discussed here:
