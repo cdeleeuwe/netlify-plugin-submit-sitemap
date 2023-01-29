@@ -3,12 +3,24 @@ import fetch from "node-fetch";
 import GetSitemapLinks from "./sitemap-url.js";
 
 import { isInIgnorePeriod, setLastSubmitTimestamp } from "./helpers.js";
-const { CONTEXT, URL } = process.env;
+const { CONTEXT, URL, INDEXNOW_KEY } = process.env;
 
 const providerUrls = {
-	bing: () => `https://www.bing.com/indexnow`,
-	yandex: () => `https://www.yandex.com/indexnow`,
-	google: (sitemapUrl) => `https://www.google.com/ping?sitemap=${sitemapUrl}`
+	bing: (sitemapUrl,enableIndexNow) => {
+		if (!enableIndexNow){
+			return `https://www.bing.com`;
+		}else{
+			return `https://www.bing.com/indexnow`;
+		}
+	},
+	yandex: (sitemapUrl, enableIndexNow) => {
+		if (!enableIndexNow) {
+			return `https://webmaster.yandex.ru/ping?sitemap=${sitemapUrl}`;
+		} else {
+			return `https://yandex.com/indexnow`;
+		}
+	},
+	google: (sitemapUrl,enableIndexNow) => `https://www.google.com/ping?sitemap=${sitemapUrl}`,
 };
 
 // Default parameters (can be overriden with inputs)
@@ -16,8 +28,9 @@ const defaults = {
 	providers: Object.keys(providerUrls),
 	baseUrl: URL,
 	sitemapPath: "/sitemap.xml",
-	key: "",
+	key: INDEXNOW_KEY,
 	keyLocation: "",
+	enableIndexNow: false,
 };
 
 // Submit sitemap to a provider. Returns either a successful or failed submission, but no error is thrown
@@ -27,56 +40,94 @@ const submitToProvider = async ({
 	baseUrl,
 	key,
 	keyLocation,
+	enableIndexNow,
 }) => {
-	// If the provider is Google,
-	if (provider === "google") {
+	if (enableIndexNow) {
+		// If the provider is Google,
+		if (provider === "google") {
+			try {
+				const googleproviderUrl = providerUrls[provider](sitemapUrl,enableIndexNow);
+				console.log(
+					`Going to submit sitemap to ${provider} \n --> URL: ${googleproviderUrl}`
+				);
+				await fetch(googleproviderUrl);
+			} catch (error) {
+				return {
+					message: `\u274c ERROR! was not able to submit sitemap to ${provider}`,
+					error,
+				};
+			}
+			return {
+				message: `\u2713 DONE! Sitemap submitted succesfully to ${provider}`,
+			};
+		}
+
+		if (!providerUrls[provider]) {
+			return {
+				message: `Provider ${provider} not found!`,
+				error: "Invalid provider",
+			};
+		}
+
+		const providerUrl = providerUrls[provider](sitemapUrl,enableIndexNow);
+		console.log(
+			`Going to submit sitemap to ${provider} \n --> URL: ${providerUrl}`
+		);
+		const urlArray = await GetSitemapLinks(sitemapUrl);
+		const defaultReqBody = {
+			host: baseUrl,
+			key: key,
+			keyLocation: keyLocation || "",
+			urlList: urlArray,
+		};
 		try {
-			const googleproviderUrl = providerUrls[provider](sitemapUrl);
-			console.log(
-				`Going to submit sitemap to ${provider} \n --> URL: ${googleproviderUrl}`
-			);
-			await fetch(googleproviderUrl)
+			await fetch(providerUrl, {
+				method: "POST",
+				body: JSON.stringify(defaultReqBody),
+			});
 		} catch (error) {
 			return {
 				message: `\u274c ERROR! was not able to submit sitemap to ${provider}`,
 				error,
 			};
 		}
-		return {
-            message: `\u2713 DONE! Sitemap submitted succesfully to ${provider}`,
-          };
-	}
 
-	if (!providerUrls[provider]) {
 		return {
-			message: `Provider ${provider} not found!`,
-			error: "Invalid provider",
+			message: `\u2713 DONE! Sitemap submitted succesfully to ${provider}`,
+		};
+	}else{
+		if (provider === "bing") {
+			return {
+				isWarning: true,
+				message: `\u26A0 WARN! Sitemap not submitted to Bing, since this has been deprecated. See https://blogs.bing.com/webmaster/may-2022/Spring-cleaning-Removed-Bing-anonymous-sitemap-submission`,
+			};
+		}
+
+		if (!providerUrls[provider]) {
+			return {
+				message: `Provider ${provider} not found!`,
+				error: "Invalid provider",
+			};
+		}
+
+		const providerUrl = providerUrls[provider](sitemapUrl);
+		console.log(
+			`Going to submit sitemap to ${provider} \n --> URL: ${providerUrl}`
+		);
+
+		try {
+			await fetch(providerUrl);
+		} catch (error) {
+			return {
+				message: `\u274c ERROR! was not able to submit sitemap to ${provider}`,
+				error,
+			};
+		}
+
+		return {
+			message: `\u2713 DONE! Sitemap submitted succesfully to ${provider}`,
 		};
 	}
-
-	const providerUrl = providerUrls[provider]();
-	console.log(
-		`Going to submit sitemap to ${provider} \n --> URL: ${providerUrl}`
-	);
-	const urlArray = await GetSitemapLinks(sitemapUrl);
-  const defaultReqBody = {
-		host: baseUrl,
-		key: key,
-		keyLocation: keyLocation || "",
-		urlList: urlArray,
-	};
-	try {
-		await fetch(providerUrl,{method: "POST", body:JSON.stringify(defaultReqBody)})
-	} catch (error) {
-		return {
-			message: `\u274c ERROR! was not able to submit sitemap to ${provider}`,
-			error,
-		};
-	}
-
-	return {
-		message: `\u2713 DONE! Sitemap submitted succesfully to ${provider}`,
-	};
 };
 
 // helpers
@@ -98,10 +149,11 @@ const prependScheme = (baseUrl) => {
 
 export const onSuccess = async (props) => {
 	const { utils, inputs, constants } = props;
-	const { providers, baseUrl, sitemapPath,key,keyLocation } = {
-		...defaults,
-		...removeEmptyValues(inputs),
-	};
+	const { providers, baseUrl, sitemapPath, key, keyLocation, enableIndexNow } =
+		{
+			...defaults,
+			...removeEmptyValues(inputs),
+		};
 
 	// Only run on production builds
 	if (constants.IS_LOCAL || CONTEXT !== "production") {
@@ -134,8 +186,16 @@ export const onSuccess = async (props) => {
 
 	// submit sitemap to all providers
 	const submissions = await Promise.all(
-		
-		providers.map((provider) =>submitToProvider({ provider, sitemapUrl,baseUrl,key,keyLocation }))
+		providers.map((provider) =>
+			submitToProvider({
+				provider,
+				sitemapUrl,
+				baseUrl,
+				key,
+				keyLocation,
+				enableIndexNow,
+			})
+		)
 	);
 
 	// For failed submissions, it might be better to use something like a utils.build.warn() as discussed here:

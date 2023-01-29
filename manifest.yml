@@ -12,9 +12,9 @@ inputs:
   - name: ignorePeriod
     description: Time in seconds to not submit the sitemap after successful submission
     default: 0
-  - name: key
-    description: string value of your key
-    default: ""
+  - name: enableIndexNow
+    description: Enable IndexNow (Boolean)
+    default: false
   - name: keyLocation
     description: Location of key if its hosted on different server
     default: ""

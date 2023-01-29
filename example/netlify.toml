@@ -15,13 +15,15 @@ package = "../"
   # Time in seconds to not submit the sitemap after successful submission
   ignorePeriod = 0
   
-  # Enabled providers to submit sitemap to (optional, default = 'google', 'yandex'). Possible providers are currently only 'google' and 'yandex'.
+  # Enabled providers to submit sitemap to (optional, default = 'google', 'yandex'). If you want to use bing then enable IndexNow option.
   providers = [
     "google",
     "bing",
     "yandex"
   ]
-  key = "8586419087c04744a51fe41345294cf9"
+
+  # Enable IndexNow  And Add **INDEXNOW_KEY** in environmental Variable.(default = false)
+  enableIndexNow = true
 
 [[plugins]]
 package = "@netlify/plugin-local-install-core"

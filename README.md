@@ -35,8 +35,8 @@ To use file-based installation, add the following lines to your `netlify.toml` f
 		"bing",
 	]
 
-	#Your Key generated from https://bing.com/indexnow put this file on root of your site.(Required for Bing and Yandex)
-	Key = "your_Key"
+	# Enable IndexNow (default = false ,Required for Bing and Yandex)
+	enableIndexNow = true
 
 	#keyLocation (optional, In Case if Your key is Located at someware else)
 	keyLocation = ""
@@ -48,6 +48,10 @@ To use file-based installation, add the following lines to your `netlify.toml` f
 - If Your Key is Located at some where else, put the path to the key in keyLocation.
 - Make Sure That You are not exposing your key in **sitemap.xml** file.
 - see example for better understanding.
+
+- ## If You enable IndexNow then Set **`INDEXNOW_KEY`** Environmental Variable as your Key
+
+
 
 Note: The `[[plugins]]` line is required for each plugin, even if you have other plugins in your `netlify.toml` file already.
 
