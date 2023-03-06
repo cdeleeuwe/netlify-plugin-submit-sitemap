@@ -78,7 +78,7 @@ export const onSuccess = async (props) => {
   };
 
   // Only run on production builds
-  if (constants.IS_LOCAL || CONTEXT !== "production") {
+  if (CONTEXT !== "production") {
     console.log(
       `Skip submitting sitemap to ${providers.join(
         ", "
